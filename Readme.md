@@ -49,7 +49,7 @@ docker run \
     -v festzelt-service:/app/data \
     --name festzelt-service festzelt-service
 ```
-The Bot is 9-5 worker, Mo-Fr. This is usually the time when staff updates vacancies. Change the cron scheduler job if you like other business hours.
+The Bot is a 9-5 worker, Mo-Fr. This is usually the time when staff updates vacancies. Change the cron scheduler job if you like other business hours.
 
 ## Bot Control
 

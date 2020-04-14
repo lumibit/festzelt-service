@@ -1,4 +1,3 @@
-''' telegram message bot '''
 import time
 import logging
 import os
@@ -138,11 +137,12 @@ class Bot(Updater):
 
 
 if __name__ == "__main__":
+    pass
 
-    import framework
     # debug bot, no scheduling
-    bot = Bot("")
+    # import framework
+    # bot = Bot("")
 
     # keep the bot running forever
-    while True:
-        time.sleep(2)
+    # while True:
+    #     time.sleep(2)

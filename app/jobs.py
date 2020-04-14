@@ -1,4 +1,3 @@
-import certifi
 import os
 import json
 import requests

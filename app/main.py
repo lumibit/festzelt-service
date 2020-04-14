@@ -92,16 +92,17 @@ class Microservice:
 def main():
     """MAIN
     """
-
     log.info('######## Container Started ########')
     log.info("Looking for vacancies {} on {} ".format(
         str(DESIRED_TIMES), str(DESIRED_DAYS)))
+
     # setup
     container = Container()
 
     telegram_bot = Bot(container)
     ms = Microservice(telegram_bot, container)
 
+    # run once after startup
     ms.run()
 
     # set cron schedule for any further runs, every minute, Mo-Fr, 9-5

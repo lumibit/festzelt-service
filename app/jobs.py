@@ -128,8 +128,8 @@ def crawl_tent(name, url, headers):
 if __name__ == "__main__":
     pass
 
-    import framework
     # Debug
+    # import framework
     # crawl_hackerzelt()
-    crawl_tent("Schuetzenzelt", BASE_URL_SCHUETZENZELT, HEADER_SCHUETZENZELT)
-    crawl_tent("Schottenhamel", BASE_URL_SCHOTTENHAMEL, HEADER_SCHOTTENHAMEL)
+    # crawl_tent("Schuetzenzelt", BASE_URL_SCHUETZENZELT, HEADER_SCHUETZENZELT)
+    # crawl_tent("Schottenhamel", BASE_URL_SCHOTTENHAMEL, HEADER_SCHOTTENHAMEL)

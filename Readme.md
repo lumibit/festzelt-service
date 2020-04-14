@@ -39,7 +39,7 @@ docker build -f dockerfile -t festzelt-service .
 
 ## RUNNING
 
-Start the bot and watching vacancies.  
+Start the bot and watch vacancies.  
 
 ```sh
 docker run \

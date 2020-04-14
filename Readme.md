@@ -51,7 +51,7 @@ docker run \
 ```
 The Bot is a 9-5 worker, Mo-Fr. This is usually the time when staff updates vacancies. Change the cron scheduler job if you like other business hours.
 
-## Bot Control
+## BOT CONTROL
 
 There are some build in commands in the bot to make it easier to control the service.
 Following commands exit:
@@ -61,7 +61,7 @@ Following commands exit:
 /stop   - Stops the Service
 ```
 
-## Customization
+## CUSTOMIZATION
 By default, the Bot will look for `Mittag` and `Nachmittag` vacancies on all days of the week.  
 This can be changed by by using comma seperated lists when launching the service.
 

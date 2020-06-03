@@ -5,6 +5,15 @@ Well, most of those tables never go public and Oktoberfest is looking "sold out"
 With this service, you can get instant notifications, in the rare situations when vacancies appear.
 Delivered directly to telegram.
 
+<hr />
+<p align="center">
+    <a href="#BUILD">Build</a> • 
+    <a href="#RUNNING">Running</a> • 
+    <a href="#BOT CONTROL">Bot Control</a> • 
+    <a href="#CUSTOMIZATION">Customization</a>
+</p>
+<hr />
+
 ## SETUP  
 
 1. **Create a Telegram Bot**  

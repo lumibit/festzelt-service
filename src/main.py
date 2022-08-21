@@ -1,13 +1,9 @@
-import sys
 import logging
-import time
-from apscheduler.schedulers.background import BackgroundScheduler
+import os
 from datetime import datetime
 
-import framework
 from bot import Bot
-from container import Container
-from constants import SESSION_STORAGE
+from s3 import download, upload
 from helpers import storage_dump, storage_load
 from jobs import crawl_hackerzelt, crawl_schottenhamel, crawl_schuetzenzelt, DESIRED_DAYS, DESIRED_TIMES
 
@@ -18,14 +14,12 @@ class Microservice:
     """Main Microservice
     """
 
-    def __init__(self, telegram_bot, scheduler):
+    def __init__(self, telegram_bot):
         """Setup
 
         Arguments:
             telegram_bot {Bot Class} -- Attach Bot
-            scheduler {Container Class} -- Attach container lifecycle management
         """
-        self.scheduler = scheduler
         self.bot = telegram_bot
 
         log.info('started')
@@ -40,7 +34,6 @@ class Microservice:
         for message in messages:
             self.bot.send("{} Availability: {}".format(
                 message['Tent'], message['Option']))
-            time.sleep(0.5)
 
     def run(self):
         """Crawl Data and compare with stored Data
@@ -50,7 +43,11 @@ class Microservice:
         log.info('________Run started_______')
 
         # read in the vacancies already known, if existing
-        stack_last_run = storage_load(SESSION_STORAGE)
+        storage_path = os.environ["SESSION_STORAGE"]
+
+        download()
+
+        stack_last_run = storage_load(storage_path)
         if not stack_last_run:
             stack_last_run = []
 
@@ -69,6 +66,7 @@ class Microservice:
             for entry_old in stack_old:
                 if entry_old['Option'] == entry['Option']:
                     match = True
+                    break
 
             if not match:
                 delta.append(entry)
@@ -77,51 +75,40 @@ class Microservice:
 
         # redump and write new list to stack
         this_run = str(datetime.now().strftime("%d.%m.%y %H:%M:%S"))
-        storage_dump(SESSION_STORAGE, this_run, stack)
+        storage_dump(storage_path, this_run, stack)
         log.info('Dump Run Results to JSON File')
+
+        upload()
 
         if len(delta) > 0:
             self.notify(delta)
 
-        self.scheduler.last_run = this_run
         log.info('________Run completed_______')
 
 
-def main():
-    """MAIN
-    """
-    log.info('######## Container Started ########')
+def lambda_handler(event, context):
+    """ Lambda Web Scraper"""
+
     log.info("Looking for vacancies {} on {} ".format(
         str(DESIRED_TIMES), str(DESIRED_DAYS)))
 
-    # setup
-    container = Container()
+    telegram_bot = Bot()
+    ms = Microservice(telegram_bot)
 
-    telegram_bot = Bot(container)
-    ms = Microservice(telegram_bot, container)
-
-    # run once after startup
+    # run service
     ms.run()
 
-    # set cron schedule for any further runs, every minute, Mo-Fr, 9-5
-    scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    scheduler.add_job(ms.run, 'cron', day_of_week='0-4',
-                      hour='9-17', minute='*')
-
-    scheduler.start()
-
-    log.info("Next job scheduled: {}".format(
-        scheduler.get_jobs()[0].next_run_time))
-
-    # keep container running forever or until telegram sets termination
-    while container.run:
-        time.sleep(1)
-
-    scheduler.remove_all_jobs()
-
-    log.warning('######## Container Shutdown ########')
-    sys.exit(0)
+    # Return to Amazon
+    return event
 
 
-if __name__ == '__main__':
-    main()
+# Local Debugging
+if __name__ == "__main__":
+
+    # f = open("tests/event.json", "r")
+    # json.load(f)
+    # f.close()
+
+    event = {}
+
+    lambda_handler(event, None)

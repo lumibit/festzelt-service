@@ -1,18 +1,14 @@
-FROM python:3.7-alpine
+# PYTHON DEPENDENCIES PACKER IMAGE
+FROM amazonlinux:2.0.20220719.0
 
-# add the requirements and install correct versions
-ADD requirements.txt /requirements.txt
+# https://techviewleo.com/how-to-install-python-on-amazon-linux/
+RUN yum install -y amazon-linux-extras && \
+    yum install -y zip && \
+    amazon-linux-extras enable python3.8 && \
+    yum install -y python3.8 && \
+    yum clean all
 
-# install dependencies, add timezone information and cleanup
-RUN \
-apk add --no-cache --virtual .build-deps gcc musl-dev libffi-dev openssl-dev && \
-apk add tzdata && cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime && echo "Europe/Berlin" >/etc/timezone && \
-pip install -r requirements.txt && \
-apk del .build-deps gcc musl-dev libffi-dev openssl-dev
+COPY src/requirements.txt /requirements.txt
 
-# add code
-ADD /app /app
-
-WORKDIR /app
-
-CMD python3 main.py
+RUN pip3.8 install -r requirements.txt -t ./python && \
+    zip -r python.zip ./python/

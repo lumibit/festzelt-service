@@ -1,6 +1,0 @@
-.vscode
-.vscode/**
-.gitignore
-__pycache__
-data/**
-Readme.md

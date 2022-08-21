@@ -1,4 +1,5 @@
 from pathlib import Path
+from s3 import download, upload
 
 
 def clean():
@@ -13,3 +14,14 @@ def test_do():
     """
 
     assert False == True, "Test failed"
+
+
+def test_download_s3():
+    print("Downloading Storage File from last run")
+    print(
+        "If ERROR [400] is displayed, AccessToken is not Valid or AWS_PROFILE is not set.")
+    print(
+        "If ERROR [404] File is not in S3, Maybe first run?")
+    # download()
+    upload()
+    print("Completed")

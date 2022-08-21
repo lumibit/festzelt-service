@@ -2,4 +2,6 @@ data/**
 __pycache__
 logs
 .ropeproject
-.vscode
+.vscode/launch.json
+.DS_Store
+.pytest_cache

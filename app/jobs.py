@@ -1,6 +1,6 @@
 import os
-import json
 import requests
+from bs4 import BeautifulSoup
 
 import logging
 
@@ -40,10 +40,11 @@ def crawl_hackerzelt():
     log.info("Hackerzelt Crawl started")
     options = []
 
+    session = requests.session()
+
     try:
-        r = POOLMANAGER.request(
-            'GET', BASE_URL_HACKERZELT, headers=HEADER_HACKERZELT)
-        soup = BeautifulSoup(r.data, features="html.parser")
+        r = session.get(BASE_URL_HACKERZELT, headers=HEADER_HACKERZELT)
+        soup = BeautifulSoup(r.text, features="html.parser")
 
         date_field = soup.find("select", {'name': "tag"})
         time_field = soup.find("select", {'name': "zeit"})
@@ -53,19 +54,20 @@ def crawl_hackerzelt():
         time_options.pop(0)
 
         log.info("Got Options, start processing")
-        for date_option in date_options:
-            log.debug(date_option.text)
-            options.append({"Tent": "Hacker", "Option": date_option.text})
+        if date_options:
+            for date_option in date_options:
+                log.debug(date_option.text)
+                options.append({"Tent": "Hacker", "Option": date_option.text})
 
-        for time_option in time_options:
-            log.debug(time_option.text)
-            options.append(
-                {"Tent": "Hacker", "Option": time_option.text})
+            for time_option in time_options:
+                log.debug(time_option.text)
+                options.append(
+                    {"Tent": "Hacker", "Option": time_option.text})
 
         log.info("Found {} vacancies, {} Days and {} Times".format(
             str(len(options)), str(len(date_options)), str(len(time_options))))
     except:
-        log.warning("Crawling failed")
+        log.warning("Crawling failed", exc_info=True)
         options.append({"Tent": "Hacker", "Option": "Crawling Failed"})
         pass
 
@@ -123,13 +125,3 @@ def crawl_tent(name, url, headers):
         pass
 
     return options
-
-
-if __name__ == "__main__":
-    pass
-
-    # Debug
-    # import framework
-    # crawl_hackerzelt()
-    # crawl_tent("Schuetzenzelt", BASE_URL_SCHUETZENZELT, HEADER_SCHUETZENZELT)
-    # crawl_tent("Schottenhamel", BASE_URL_SCHOTTENHAMEL, HEADER_SCHOTTENHAMEL)

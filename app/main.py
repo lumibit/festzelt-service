@@ -1,5 +1,3 @@
-import json
-import os
 import sys
 import logging
 import time
@@ -60,7 +58,7 @@ class Microservice:
         stack = []
         stack.extend(crawl_schottenhamel())
         stack.extend(crawl_schuetzenzelt())
-        # stack.extend(crawl_hackerzelt())
+        stack.extend(crawl_hackerzelt())
 
         # compare two lists and build a delta
         stack_old = stack_last_run
@@ -106,7 +104,7 @@ def main():
     ms.run()
 
     # set cron schedule for any further runs, every minute, Mo-Fr, 9-5
-    scheduler = BackgroundScheduler()
+    scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
     scheduler.add_job(ms.run, 'cron', day_of_week='0-4',
                       hour='9-17', minute='*')
 

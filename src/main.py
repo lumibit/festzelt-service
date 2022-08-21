@@ -1,12 +1,9 @@
-import sys
 import logging
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 
-import framework
 from bot import Bot
-from container import Container
 from constants import SESSION_STORAGE
 from helpers import storage_dump, storage_load
 from jobs import crawl_hackerzelt, crawl_schottenhamel, crawl_schuetzenzelt, DESIRED_DAYS, DESIRED_TIMES
@@ -18,14 +15,12 @@ class Microservice:
     """Main Microservice
     """
 
-    def __init__(self, telegram_bot, scheduler):
+    def __init__(self, telegram_bot):
         """Setup
 
         Arguments:
             telegram_bot {Bot Class} -- Attach Bot
-            scheduler {Container Class} -- Attach container lifecycle management
         """
-        self.scheduler = scheduler
         self.bot = telegram_bot
 
         log.info('started')
@@ -83,45 +78,37 @@ class Microservice:
         if len(delta) > 0:
             self.notify(delta)
 
-        self.scheduler.last_run = this_run
         log.info('________Run completed_______')
 
 
-def main():
-    """MAIN
-    """
-    log.info('######## Container Started ########')
+def lambda_handler(event, context):
+    """ Lambda Web Scraper"""
+
     log.info("Looking for vacancies {} on {} ".format(
         str(DESIRED_TIMES), str(DESIRED_DAYS)))
 
-    # setup
-    container = Container()
+    telegram_bot = Bot()
+    ms = Microservice(telegram_bot)
 
-    telegram_bot = Bot(container)
-    ms = Microservice(telegram_bot, container)
+    # run service
+    # ms.run()
 
-    # run once after startup
-    ms.run()
+    # test
+    dummy = {
+        "Tent": "Schottenhamel",
+        "Option": "1. Montag, 19.09.2022 - Mittag ['Halle Süd/Mitte', 'Viktualienboxe', 'Hausboxe', 'Brauerei Boxe', 'Münchner Kindl Boxe', 'Traditionsboxe', 'Anstich Boxe', 'Bavaria Boxe', 'Prinzregenten Boxe', 'Wirtsbuden Boxe', 'Balkon', 'Galerie', 'Halle Nord']"
+    },
+    ms.notify(dummy)
 
-    # set cron schedule for any further runs, every minute, Mo-Fr, 9-5
-    scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    scheduler.add_job(ms.run, 'cron', day_of_week='0-4',
-                      hour='9-17', minute='*')
-
-    scheduler.start()
-
-    log.info("Next job scheduled: {}".format(
-        scheduler.get_jobs()[0].next_run_time))
-
-    # keep container running forever or until telegram sets termination
-    while container.run:
-        time.sleep(1)
-
-    scheduler.remove_all_jobs()
-
-    log.warning('######## Container Shutdown ########')
-    sys.exit(0)
+    # Return to Amazon
+    return event
 
 
-if __name__ == '__main__':
-    main()
+# Local Debugging
+if __name__ == "__main__":
+
+    # f = open("test/event.json", "r")
+    event = {}  # json.load(f)
+    # f.close()
+
+    lambda_handler(event, None)

@@ -46,5 +46,3 @@ BASE_URL_SCHUETZENZELT = "https://api.schuetzenfestzelt.wiesn-os.de/lp/guestlist
 
 TENTMAP_SCHOTTENHAMEL = "[Schottenhamel TentMap](https://www.festhalle-schottenhamel.de/application/files/5915/7616/3902/Zeltplan_2020.jpg)"
 TENTMAP_SCHUETZENZELT = "[Schützenzelt TentMap](https://reservierung.schuetzenfestzelt.com/_nuxt/img/tent-map.c61a8f9.png)"
-
-SESSION_STORAGE = 'data/vacancies.json'

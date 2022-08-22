@@ -1,10 +1,9 @@
 import logging
-import time
-from apscheduler.schedulers.background import BackgroundScheduler
+import os
 from datetime import datetime
 
 from bot import Bot
-from constants import SESSION_STORAGE
+from s3 import download, upload
 from helpers import storage_dump, storage_load
 from jobs import crawl_hackerzelt, crawl_schottenhamel, crawl_schuetzenzelt, DESIRED_DAYS, DESIRED_TIMES
 
@@ -35,7 +34,6 @@ class Microservice:
         for message in messages:
             self.bot.send("{} Availability: {}".format(
                 message['Tent'], message['Option']))
-            time.sleep(0.5)
 
     def run(self):
         """Crawl Data and compare with stored Data
@@ -45,7 +43,11 @@ class Microservice:
         log.info('________Run started_______')
 
         # read in the vacancies already known, if existing
-        stack_last_run = storage_load(SESSION_STORAGE)
+        storage_path = os.environ["SESSION_STORAGE"]
+
+        download()
+
+        stack_last_run = storage_load(storage_path)
         if not stack_last_run:
             stack_last_run = []
 
@@ -64,6 +66,7 @@ class Microservice:
             for entry_old in stack_old:
                 if entry_old['Option'] == entry['Option']:
                     match = True
+                    break
 
             if not match:
                 delta.append(entry)
@@ -72,8 +75,10 @@ class Microservice:
 
         # redump and write new list to stack
         this_run = str(datetime.now().strftime("%d.%m.%y %H:%M:%S"))
-        storage_dump(SESSION_STORAGE, this_run, stack)
+        storage_dump(storage_path, this_run, stack)
         log.info('Dump Run Results to JSON File')
+
+        upload()
 
         if len(delta) > 0:
             self.notify(delta)
@@ -91,14 +96,7 @@ def lambda_handler(event, context):
     ms = Microservice(telegram_bot)
 
     # run service
-    # ms.run()
-
-    # test
-    dummy = {
-        "Tent": "Schottenhamel",
-        "Option": "1. Montag, 19.09.2022 - Mittag ['Halle Süd/Mitte', 'Viktualienboxe', 'Hausboxe', 'Brauerei Boxe', 'Münchner Kindl Boxe', 'Traditionsboxe', 'Anstich Boxe', 'Bavaria Boxe', 'Prinzregenten Boxe', 'Wirtsbuden Boxe', 'Balkon', 'Galerie', 'Halle Nord']"
-    },
-    ms.notify(dummy)
+    ms.run()
 
     # Return to Amazon
     return event
@@ -107,8 +105,10 @@ def lambda_handler(event, context):
 # Local Debugging
 if __name__ == "__main__":
 
-    # f = open("test/event.json", "r")
-    event = {}  # json.load(f)
+    # f = open("tests/event.json", "r")
+    # json.load(f)
     # f.close()
+
+    event = {}
 
     lambda_handler(event, None)

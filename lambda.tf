@@ -44,7 +44,8 @@ resource "aws_lambda_layer_version" "python_packages" {
   filename   = "./deployment/python.zip"
   layer_name = "python_packages"
 
-  source_code_hash = filebase64sha256("./deployment/python.zip")
+  # if the no dependency package exists, force creation with a timestamp, that is always different
+  source_code_hash = fileexists("./deployment/python.zip") ? filebase64sha256("./deployment/python.zip") : "${timestamp()}"
 
   compatible_runtimes = ["python3.8"]
 

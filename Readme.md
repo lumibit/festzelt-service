@@ -76,19 +76,18 @@ Always use the official reservations sites for booking!
 
 ### SOURCE CODE
 
-Setup the necessary environment variables
+Add an `.env` file to your `.vscode` folder to enable pytest and debugging.  
+Add the following environment variables:  
 
-```json
-  "env": {
-      "PYTHON_LOGLEVEL": "DEBUG",
-      "TELEGRAM_TOKEN": "YOUR_TELEGRAM_TOKEN",
-      "TELEGRAM_CHANNEL": "-12345678",
-      "SESSION_STORAGE": "data/vacancies.json",
-      "BUCKET_NAME": "wiesn-zelt-crawler",
-      "DESIRED_TIMES": "Mittag, Nachmittag",
-      "DESIRED_DAYS": "Montag, Dienstag",
-      "DEBUG": true
-  }
+```sh
+PYTHON_LOGLEVEL=DEBUG
+TELEGRAM_TOKEN=123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ
+TELEGRAM_CHANNEL=-12345678
+SESSION_STORAGE=data/vacancies.json
+BUCKET_NAME=wiesn-zelt-crawler
+DESIRED_TIMES=Mittag Nachmittag
+DESIRED_DAYS=Montag Dienstag
+DEBUG=true
 ```
 
 ### AWS

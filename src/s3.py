@@ -1,5 +1,6 @@
 import boto3
 import os
+from pathlib import Path
 
 import logging
 log = logging.getLogger()
@@ -27,6 +28,7 @@ def upload():
 def download():
     log.info("Downloading File")
     try:
+        Path(DATA_PATH).parent.mkdir(parents=True, exist_ok=True)
         client.download_file(BUCKET, "vacancies.json", DATA_PATH)
     except:
         log.warning(

@@ -197,7 +197,6 @@ terraform.rc
 data/**
 logs
 .ropeproject
-.vscode/launch.json
 .DS_Store
 .pytest_cache
 

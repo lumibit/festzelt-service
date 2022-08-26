@@ -76,19 +76,17 @@ Always use the official reservations sites for booking!
 
 ### SOURCE CODE
 
-Setup the necessary environment variables
+Setup the necessary environment variables in an .env file
 
-```json
-  "env": {
-      "PYTHON_LOGLEVEL": "DEBUG",
-      "TELEGRAM_TOKEN": "YOUR_TELEGRAM_TOKEN",
-      "TELEGRAM_CHANNEL": "-12345678",
-      "SESSION_STORAGE": "data/vacancies.json",
-      "BUCKET_NAME": "wiesn-zelt-crawler",
-      "DESIRED_TIMES": "Mittag, Nachmittag",
-      "DESIRED_DAYS": "Montag, Dienstag",
-      "DEBUG": true
-  }
+```.env
+PYTHON_LOGLEVEL=DEBUG
+TELEGRAM_TOKEN=123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ
+TELEGRAM_CHANNEL=-123456789
+SESSION_STORAGE=data/vacancies.json
+BUCKET_NAME=wiesn-zelt-crawler
+DESIRED_TIMES=Mittag, Nachmittag
+DESIRED_DAYS=Montag, Dienstag
+DEBUG=true
 ```
 
 ### AWS

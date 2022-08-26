@@ -1,4 +1,5 @@
 import os
+from fnmatch import fnmatch
 import requests
 from bs4 import BeautifulSoup
 
@@ -13,6 +14,12 @@ DESIRED_TIMES = os.environ.get(
 
 DESIRED_DAYS = os.environ.get(
     "DESIRED_DAYS", "Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag").replace(" ", "").split(",")
+
+DESIRED_SEATING_SCHOTTENHAMEL = os.environ.get(
+    "DESIRED_SEATING_SCHOTTENHAMEL", "*").replace(" ", "").split(",")
+
+DESIRED_SEATING_SCHUETZENZELT = os.environ.get(
+    "DESIRED_SEATING_SCHUETZENZELT", "*").replace(" ", "").split(",")
 
 
 def api_call(url, headers):
@@ -75,11 +82,36 @@ def crawl_hackerzelt():
 
 
 def crawl_schuetzenzelt():
-    return crawl_tent("Schuetzenzelt", BASE_URL_SCHUETZENZELT, HEADER_SCHUETZENZELT)
+
+    options = crawl_tent(
+        "Schuetzenzelt", BASE_URL_SCHUETZENZELT, HEADER_SCHUETZENZELT)
+
+    filtered = filter(options, DESIRED_SEATING_SCHUETZENZELT)
+    return filtered
 
 
 def crawl_schottenhamel():
-    return crawl_tent("Schottenhamel", BASE_URL_SCHOTTENHAMEL, HEADER_SCHOTTENHAMEL)
+
+    options = crawl_tent(
+        "Schottenhamel", BASE_URL_SCHOTTENHAMEL, HEADER_SCHOTTENHAMEL)
+
+    filtered = filter(options, DESIRED_SEATING_SCHOTTENHAMEL)
+    return filtered
+
+
+def filter(options, desired_seating):
+
+    filtered = []
+
+    for option in options:
+        for filter in desired_seating:
+
+            # add wildcards before and after the filter
+            if fnmatch(option["Option"].lower(), "*" + filter.lower() + "*"):
+                if option["Option"] not in filtered:
+                    filtered.append(option)
+
+    return filtered
 
 
 def crawl_tent(name, url, headers):

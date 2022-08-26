@@ -25,13 +25,15 @@ resource "aws_lambda_function" "scraper_telegram_bot" {
 
   environment {
     variables = {
-      TELEGRAM_TOKEN   = var.telegram_token,
-      TELEGRAM_CHANNEL = var.telegram_channel,
-      DESIRED_TIMES    = var.desired_times,
-      DESIRED_DAYS     = var.desired_days,
-      BUCKET_NAME      = aws_s3_bucket.data.id,
-      SESSION_STORAGE  = "/tmp/vacancies.json",
-      PYTHON_LOGLEVEL  = "INFO"
+      TELEGRAM_TOKEN                = var.telegram_token,
+      TELEGRAM_CHANNEL              = var.telegram_channel,
+      DESIRED_TIMES                 = var.desired_times,
+      DESIRED_DAYS                  = var.desired_days,
+      DESIRED_SEATING_SCHOTTENHAMEL = var.desired_seating_schottenhamel,
+      DESIRED_SEATING_SCHUETZENZELT = var.desired_seating_schuetzenzelt,
+      BUCKET_NAME                   = aws_s3_bucket.data.id,
+      SESSION_STORAGE               = "/tmp/vacancies.json",
+      PYTHON_LOGLEVEL               = "INFO"
     }
   }
 

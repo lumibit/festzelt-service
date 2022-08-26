@@ -29,3 +29,16 @@ variable "desired_days" {
   default     = "Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag"
   description = "The Days you want to go to Oktoberfest - Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag"
 }
+
+variable "desired_seating_schottenhamel" {
+  type        = string
+  default     = "*"
+  description = "The seating you want in Schottenhamel Tent - Halle, Hallenboxe, *, ..."
+}
+
+variable "desired_seating_schuetzenzelt" {
+  type        = string
+  default     = "*"
+  description = "The seating you want in Schuetzen Tent - Reihe, Wiessee Box, *, ..."
+}
+

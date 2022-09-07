@@ -75,7 +75,6 @@ def crawl_hackerzelt():
             str(len(options)), str(len(date_options)), str(len(time_options))))
     except:
         log.warning("Crawling failed", exc_info=True)
-        options.append({"Tent": "Hacker", "Option": "Crawling Failed"})
         pass
 
     return options

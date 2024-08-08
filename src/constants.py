@@ -1,15 +1,17 @@
 HEADER_HACKERZELT = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Accept-Language': 'en,en-US;q=0.7,de;q=0.3',
-    'Cache-Control': 'max-age=0',
-    'Connection': 'keep-alive',
-    'Host': 'hacker-festzelt.de',
-    'Sec-Fetch-Mode': 'navigate',
-    'Sec-Fetch-Site': 'none',
-    'Sec-Fetch-User': '?1',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36'
+    'accept': 'application/json, text/plain, */*',
+    'accept-language': 'de',
+    'origin': 'https://reservierung.hacker-festzelt.de',
+    'priority': 'u=1, i',
+    'referer': 'https://reservierung.hacker-festzelt.de/',
+    'sec-ch-ua': '"Not)A;Brand";v="99", "Google Chrome";v="127", "Chromium";v="127"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'cross-site',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+    'x-festzelt-os-company': 'FOSHACK943',
 }
 
 HEADER_SCHOTTENHAMEL = {
@@ -40,9 +42,6 @@ HEADER_SCHUETZENZELT = {
     'referer': 'https://reservierung.schuetzenfestzelt.com/register/1',
 }
 
-BASE_URL_HACKERZELT = "https://hacker-festzelt.de/php/hackerformv4.php"
+BASE_URL_HACKERZELT = "https://api.festzelt-os.com/lp/guestlists"
 BASE_URL_SCHOTTENHAMEL = "https://api.schottenhamel.wiesn.airlst.com/lp/guestlists"
 BASE_URL_SCHUETZENZELT = "https://api.schuetzenfestzelt.wiesn-os.de/lp/guestlists"
-
-TENTMAP_SCHOTTENHAMEL = "[Schottenhamel TentMap](https://www.festhalle-schottenhamel.de/application/files/5915/7616/3902/Zeltplan_2020.jpg)"
-TENTMAP_SCHUETZENZELT = "[Schützenzelt TentMap](https://reservierung.schuetzenfestzelt.com/_nuxt/img/tent-map.c61a8f9.png)"

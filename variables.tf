@@ -42,3 +42,8 @@ variable "desired_seating_schuetzenzelt" {
   description = "The seating you want in Schuetzen Tent - Reihe, Wiessee Box, *, ..."
 }
 
+variable "desired_seating_hackerzelt" {
+  type        = string
+  default     = "*"
+  description = "The seating you want in Schuetzen Tent - Innenraum, Boxe, *, ..."
+}

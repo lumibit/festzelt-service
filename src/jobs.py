@@ -21,6 +21,9 @@ DESIRED_SEATING_SCHOTTENHAMEL = os.environ.get(
 DESIRED_SEATING_SCHUETZENZELT = os.environ.get(
     "DESIRED_SEATING_SCHUETZENZELT", "*").replace(" ", "").split(",")
 
+DESIRED_SEATING_HACKERZELT = os.environ.get(
+    "DESIRED_SEATING_HACKERZELT", "*").replace(" ", "").split(",")
+
 
 def api_call(url, headers):
     """Call the API of the Tents
@@ -44,40 +47,12 @@ def api_call(url, headers):
 
 
 def crawl_hackerzelt():
-    log.info("Hackerzelt Crawl started")
-    options = []
 
-    session = requests.session()
+    options = crawl_tent(
+        "Hackezelt", BASE_URL_HACKERZELT, HEADER_HACKERZELT)
 
-    try:
-        r = session.get(BASE_URL_HACKERZELT, headers=HEADER_HACKERZELT)
-        soup = BeautifulSoup(r.text, features="html.parser")
-
-        date_field = soup.find("select", {'name': "tag"})
-        time_field = soup.find("select", {'name': "zeit"})
-        time_options = time_field.find_all("option")
-        date_options = date_field.find_all("option")
-        date_options.pop(0)
-        time_options.pop(0)
-
-        log.info("Got Options, start processing")
-        if date_options:
-            for date_option in date_options:
-                log.debug(date_option.text)
-                options.append({"Tent": "Hacker", "Option": date_option.text})
-
-            for time_option in time_options:
-                log.debug(time_option.text)
-                options.append(
-                    {"Tent": "Hacker", "Option": time_option.text})
-
-        log.info("Found {} vacancies, {} Days and {} Times".format(
-            str(len(options)), str(len(date_options)), str(len(time_options))))
-    except:
-        log.warning("Crawling failed", exc_info=True)
-        pass
-
-    return options
+    filtered = filter(options, DESIRED_SEATING_HACKERZELT)
+    return filtered
 
 
 def crawl_schuetzenzelt():
